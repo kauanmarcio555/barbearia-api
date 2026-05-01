@@ -1,89 +1,151 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel do Barbeiro</title>
+    <title>Painel do Barbeiro | Barbearia do Kauan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #2c3e50; color: white; }
-        tr:hover { background-color: #f1f1f1; }
-        .vazio { text-align: center; color: #777; margin-top: 20px; font-style: italic; }
-        .btn-atualizar { display: block; margin: 20px auto 0; padding: 10px 20px; background-color: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .btn-atualizar:hover { background-color: #219150; }
+        :root {
+            --gold: #c5a059;
+            --dark-bg: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --text: #ffffff;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark-bg);
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1000');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        header { text-align: center; padding: 40px 20px; }
+        header h1 {
+            font-family: 'Oswald', sans-serif; font-size: 3rem; color: var(--gold);
+            margin: 0; text-transform: uppercase; letter-spacing: 4px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        header p { font-style: italic; color: #ccc; margin-top: 5px; }
+        
+        /* O mesmo container do agendamento */
+        .container {
+            background-color: var(--card-bg); width: 90%; max-width: 450px;
+            padding: 30px; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
+            margin-bottom: 50px;
+        }
+        h2 { text-align: center; font-family: 'Oswald', sans-serif; color: var(--gold); margin-bottom: 25px; font-size: 1.5rem; }
+        
+        .btn-gold {
+            width: 100%; padding: 15px; background-color: var(--gold); color: #000;
+            border: none; border-radius: 5px; font-weight: bold; font-size: 1.1rem;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-bottom: 20px;
+        }
+        .btn-gold:hover { background-color: #e2b86a; transform: scale(1.02); }
+
+        /* Estilo dos mini-cartões de cada cliente */
+        .cliente-card {
+            background-color: #000;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+        .cliente-card:hover { border-color: var(--gold); }
+        .cliente-card h3 { margin: 0 0 10px 0; color: var(--gold); font-family: 'Oswald', sans-serif; }
+        .cliente-card p { margin: 5px 0; font-size: 0.95rem; color: #ccc; }
+        
+        .btn-excluir {
+            width: 100%; padding: 10px; background-color: transparent; color: #ff5252;
+            border: 1px solid #ff5252; border-radius: 5px; font-weight: bold;
+            cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase;
+        }
+        .btn-excluir:hover { background-color: #ff5252; color: #000; }
+        
+        #mensagem { text-align: center; color: #888; font-style: italic; }
+        footer { margin-top: auto; padding: 20px; font-size: 0.8rem; color: #777; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>✂️ Painel de Controle - Agendamentos</h2>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Cliente</th>
-                    <th>Serviço</th>
-                    <th>Data</th>
-                    <th>Hora</th>
-                </tr>
-            </thead>
-            <tbody id="listaAgendamentos">
-                </tbody>
-        </table>
-        
-        <div id="mensagemVazio" class="vazio">Buscando agendamentos...</div>
 
-        <button class="btn-atualizar" onclick="carregarAgendamentos()">🔄 Atualizar Lista</button>
+    <header>
+        <h1>Painel VIP</h1>
+        <p>Gerenciamento de Clientes</p>
+    </header>
+
+    <div class="container">
+        <h2>Próximos Agendamentos</h2>
+        <button class="btn-gold" onclick="carregarAgendamentos()">🔄 Atualizar Lista</button>
+        
+        <div id="lista-agendamentos">
+            <p id="mensagem">Carregando...</p>
+        </div>
     </div>
 
+    <footer>
+        &copy; 2026 Barbearia do Kauan - Acesso Restrito
+    </footer>
+
     <script>
-        // Função que vai na nossa API buscar os dados e montar a tabela
         async function carregarAgendamentos() {
+            const divLista = document.getElementById('lista-agendamentos');
+            divLista.innerHTML = '<p id="mensagem">Atualizando...</p>';
+
             try {
-                // Vai na rota GET buscar os agendamentos salvos
                 const resposta = await fetch('/agendamentos');
                 const agendamentos = await resposta.json();
 
-                const tabelaCorpo = document.getElementById('listaAgendamentos');
-                const mensagemVazio = document.getElementById('mensagemVazio');
+                divLista.innerHTML = ''; 
 
-                tabelaCorpo.innerHTML = ''; // Limpa a tabela antes de preencher com os novos dados
-
-                // Se não tiver ninguém agendado ainda
                 if (agendamentos.length === 0) {
-                    mensagemVazio.innerText = "Nenhum agendamento marcado ainda.";
-                    mensagemVazio.style.display = "block";
-                } else {
-                    // Se tiver, esconde a mensagem e monta as linhas da tabela
-                    mensagemVazio.style.display = "none";
-                    
-                    agendamentos.forEach(agendamento => {
-                        const linha = document.createElement('tr');
-                        
-                        // Inverte a data para o padrão brasileiro (DD/MM/AAAA)
-                        const dataBr = agendamento.data.split('-').reverse().join('/');
-                        
-                        linha.innerHTML = `
-                            <td>#${agendamento.id}</td>
-                            <td><strong>${agendamento.cliente}</strong></td>
-                            <td>${agendamento.servico}</td>
-                            <td>${dataBr}</td>
-                            <td>${agendamento.hora}</td>
-                        `;
-                        tabelaCorpo.appendChild(linha);
-                    });
+                    divLista.innerHTML = '<p id="mensagem">Nenhum cliente agendado.</p>';
+                    return;
                 }
+
+                agendamentos.forEach(a => {
+                    let dataF = a.data.replace('T', ' às ');
+                    
+                    const divCard = document.createElement('div');
+                    divCard.className = 'cliente-card';
+                    divCard.innerHTML = `
+                        <h3>${a.nome}</h3>
+                        <p><strong>📅 Data/Hora:</strong> ${dataF}</p>
+                        <p><strong>✂️ Serviço:</strong> ${a.servico}</p>
+                        <button class="btn-excluir" onclick="excluir(${a.id})">✔ Marcar como Concluído</button>
+                    `;
+                    divLista.appendChild(divCard);
+                });
+
             } catch (erro) {
-                console.error("Erro ao carregar:", erro);
-                document.getElementById('mensagemVazio').innerText = "Erro ao conectar com o servidor.";
+                divLista.innerHTML = '<p id="mensagem" style="color: #FF5252;">Erro ao carregar os dados.</p>';
             }
         }
 
-        // Carrega a lista automaticamente assim que o barbeiro abre a página
+        async function excluir(id) {
+            if (!confirm("Finalizar este agendamento?")) return;
+            try {
+                const res = await fetch(`/agendamentos/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    carregarAgendamentos();
+                } else {
+                    alert("Erro ao concluir.");
+                }
+            } catch (e) {
+                alert("Erro de conexão.");
+            }
+        }
+
+        // Carrega automaticamente
         carregarAgendamentos();
     </script>
 </body>

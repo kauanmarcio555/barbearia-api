@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Barbeiro</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #2c3e50; color: white; }
+        tr:hover { background-color: #f1f1f1; }
+        .vazio { text-align: center; color: #777; margin-top: 20px; font-style: italic; }
+        .btn-atualizar { display: block; margin: 20px auto 0; padding: 10px 20px; background-color: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-atualizar:hover { background-color: #219150; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>✂️ Painel de Controle - Agendamentos</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Serviço</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                </tr>
+            </thead>
+            <tbody id="listaAgendamentos">
+                </tbody>
+        </table>
+        
+        <div id="mensagemVazio" class="vazio">Buscando agendamentos...</div>
+
+        <button class="btn-atualizar" onclick="carregarAgendamentos()">🔄 Atualizar Lista</button>
+    </div>
+
+    <script>
+        // Função que vai na nossa API buscar os dados e montar a tabela
+        async function carregarAgendamentos() {
+            try {
+                // Vai na rota GET buscar os agendamentos salvos
+                const resposta = await fetch('/agendamentos');
+                const agendamentos = await resposta.json();
+
+                const tabelaCorpo = document.getElementById('listaAgendamentos');
+                const mensagemVazio = document.getElementById('mensagemVazio');
+
+                tabelaCorpo.innerHTML = ''; // Limpa a tabela antes de preencher com os novos dados
+
+                // Se não tiver ninguém agendado ainda
+                if (agendamentos.length === 0) {
+                    mensagemVazio.innerText = "Nenhum agendamento marcado ainda.";
+                    mensagemVazio.style.display = "block";
+                } else {
+                    // Se tiver, esconde a mensagem e monta as linhas da tabela
+                    mensagemVazio.style.display = "none";
+                    
+                    agendamentos.forEach(agendamento => {
+                        const linha = document.createElement('tr');
+                        
+                        // Inverte a data para o padrão brasileiro (DD/MM/AAAA)
+                        const dataBr = agendamento.data.split('-').reverse().join('/');
+                        
+                        linha.innerHTML = `
+                            <td>#${agendamento.id}</td>
+                            <td><strong>${agendamento.cliente}</strong></td>
+                            <td>${agendamento.servico}</td>
+                            <td>${dataBr}</td>
+                            <td>${agendamento.hora}</td>
+                        `;
+                        tabelaCorpo.appendChild(linha);
+                    });
+                }
+            } catch (erro) {
+                console.error("Erro ao carregar:", erro);
+                document.getElementById('mensagemVazio').innerText = "Erro ao conectar com o servidor.";
+            }
+        }
+
+        // Carrega a lista automaticamente assim que o barbeiro abre a página
+        carregarAgendamentos();
+    </script>
+</body>
+</html>

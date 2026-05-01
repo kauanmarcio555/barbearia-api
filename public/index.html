@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia Style</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { text-align: center; color: #333; margin-top: 0; }
+        label { font-weight: bold; margin-top: 10px; display: block; color: #555; }
+        input, select, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
+        button { background-color: #2c3e50; color: white; border: none; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+        button:hover { background-color: #1a252f; }
+        #mensagem { text-align: center; margin-top: 15px; font-weight: bold; color: green; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>💈 Agende seu Horário</h2>
+        <form id="formAgendamento">
+            <label for="cliente">Seu Nome:</label>
+            <input type="text" id="cliente" required placeholder="Digite seu nome">
+
+            <label for="servicoId">Serviço:</label>
+            <select id="servicoId">
+                <option value="1">Corte Simples - R$ 35,00</option>
+                <option value="2">Barba Completa - R$ 25,00</option>
+                <option value="3">Corte + Barba - R$ 50,00</option>
+            </select>
+
+            <label for="data">Data:</label>
+            <input type="date" id="data" required>
+
+            <label for="hora">Horário:</label>
+            <input type="time" id="hora" required>
+
+            <button type="submit">Confirmar Agendamento</button>
+        </form>
+        <div id="mensagem"></div>
+    </div>
+
+    <script>
+        // Este código avisa a nossa API quando o botão for clicado
+        document.getElementById('formAgendamento').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Impede a página de recarregar
+
+            // Pega os valores que o cliente digitou
+            const dados = {
+                cliente: document.getElementById('cliente').value,
+                servicoId: parseInt(document.getElementById('servicoId').value),
+                data: document.getElementById('data').value,
+                hora: document.getElementById('hora').value
+            };
+
+            // Envia para a nossa API usando a rota POST
+            const resposta = await fetch('/agendamentos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+
+            if(resposta.ok) {
+                document.getElementById('mensagem').innerText = "✅ Agendamento realizado com sucesso!";
+                document.getElementById('formAgendamento').reset(); // Limpa o formulário
+            } else {
+                document.getElementById('mensagem').innerText = "❌ Erro ao agendar.";
+                document.getElementById('mensagem').style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>

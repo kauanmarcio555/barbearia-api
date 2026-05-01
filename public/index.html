@@ -1,74 +1,214 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barbearia Style</title>
+    <title>Barbearia do Kauan | Agendamento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { text-align: center; color: #333; margin-top: 0; }
-        label { font-weight: bold; margin-top: 10px; display: block; color: #555; }
-        input, select, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
-        button { background-color: #2c3e50; color: white; border: none; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.3s; }
-        button:hover { background-color: #1a252f; }
-        #mensagem { text-align: center; margin-top: 15px; font-weight: bold; color: green; }
+        :root {
+            --gold: #c5a059;
+            --dark-bg: #0f0f0f;
+            --card-bg: #1a1a1a;
+            --text: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark-bg);
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1000');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3rem;
+            color: var(--gold);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        header p {
+            font-style: italic;
+            color: #ccc;
+            margin-top: 5px;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            width: 90%;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            text-align: center;
+            font-family: 'Oswald', sans-serif;
+            color: var(--gold);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--gold);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background-color: #000;
+            color: #fff;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 5px rgba(197, 160, 89, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--gold);
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #e2b86a;
+            transform: scale(1.02);
+        }
+
+        #mensagem {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #777;
+        }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>💈 Agende seu Horário</h2>
-        <form id="formAgendamento">
-            <label for="cliente">Seu Nome:</label>
-            <input type="text" id="cliente" required placeholder="Digite seu nome">
+    <header>
+        <h1>Barbearia do Kauan</h1>
+        <p>Estilo, Tradição e Excelência</p>
+    </header>
 
-            <label for="servicoId">Serviço:</label>
-            <select id="servicoId">
-                <option value="1">Corte Simples - R$ 35,00</option>
-                <option value="2">Barba Completa - R$ 25,00</option>
-                <option value="3">Corte + Barba - R$ 50,00</option>
-            </select>
+    <div class="container">
+        <h2>Agende seu Horário</h2>
+        <form id="agendamento-form">
+            <div class="form-group">
+                <label for="nome">NOME COMPLETO</label>
+                <input type="text" id="nome" placeholder="Seu nome aqui..." required>
+            </div>
 
-            <label for="data">Data:</label>
-            <input type="date" id="data" required>
+            <div class="form-group">
+                <label for="data">DATA E HORA</label>
+                <input type="datetime-local" id="data" required>
+            </div>
 
-            <label for="hora">Horário:</label>
-            <input type="time" id="hora" required>
+            <div class="form-group">
+                <label for="servico">SERVIÇO DESEJADO</label>
+                <select id="servico" required>
+                    <option value="">Selecione um serviço...</option>
+                    <option value="Corte Simples">Corte Simples - R$ 35,00</option>
+                    <option value="Corte e Barba">Corte e Barba - R$ 60,00</option>
+                    <option value="Barba Completa">Barba Alinhada - R$ 30,00</option>
+                    <option value="Sobrancelha">Sobrancelha - R$ 15,00</option>
+                </select>
+            </div>
 
             <button type="submit">Confirmar Agendamento</button>
         </form>
-        <div id="mensagem"></div>
+        <p id="mensagem"></p>
     </div>
 
-    <script>
-        // Este código avisa a nossa API quando o botão for clicado
-        document.getElementById('formAgendamento').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Impede a página de recarregar
+    <footer>
+        &copy; 2026 Barbearia do Kauan - Todos os direitos reservados.
+    </footer>
 
-            // Pega os valores que o cliente digitou
+    <script>
+        const form = document.getElementById('agendamento-form');
+        const msg = document.getElementById('mensagem');
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            msg.innerText = "Enviando...";
+            
             const dados = {
-                cliente: document.getElementById('cliente').value,
-                servicoId: parseInt(document.getElementById('servicoId').value),
+                nome: document.getElementById('nome').value,
                 data: document.getElementById('data').value,
-                hora: document.getElementById('hora').value
+                servico: document.getElementById('servico').value
             };
 
-            // Envia para a nossa API usando a rota POST
-            const resposta = await fetch('/agendamentos', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dados)
-            });
+            try {
+                const res = await fetch('/agendamentos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
 
-            if(resposta.ok) {
-                document.getElementById('mensagem').innerText = "✅ Agendamento realizado com sucesso!";
-                document.getElementById('formAgendamento').reset(); // Limpa o formulário
-            } else {
-                document.getElementById('mensagem').innerText = "❌ Erro ao agendar.";
-                document.getElementById('mensagem').style.color = "red";
+                if (res.ok) {
+                    msg.innerText = "✅ Sucesso! Seu horário foi reservado.";
+                    msg.style.color = "#4CAF50";
+                    form.reset();
+                } else {
+                    msg.innerText = "❌ Erro ao agendar. Tente novamente.";
+                    msg.style.color = "#FF5252";
+                }
+            } catch (err) {
+                msg.innerText = "❌ Erro de conexão com o servidor.";
+                msg.style.color = "#FF5252";
             }
-        });
+        };
     </script>
 </body>
 </html>

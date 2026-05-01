@@ -6,133 +6,23 @@
     <title>Barbearia do Kauan | Agendamento</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --gold: #c5a059;
-            --dark-bg: #0f0f0f;
-            --card-bg: #1a1a1a;
-            --text: #ffffff;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--dark-bg);
-            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1000');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: var(--text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        header {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        header h1 {
-            font-family: 'Oswald', sans-serif;
-            font-size: 3rem;
-            color: var(--gold);
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        header p {
-            font-style: italic;
-            color: #ccc;
-            margin-top: 5px;
-        }
-
-        .container {
-            background-color: var(--card-bg);
-            width: 90%;
-            max-width: 450px;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-            border: 1px solid rgba(197, 160, 89, 0.2);
-            -webkit-backdrop-filter: blur(5px);
-            backdrop-filter: blur(5px);
-            margin-bottom: 50px;
-        }
-
-        h2 {
-            text-align: center;
-            font-family: 'Oswald', sans-serif;
-            color: var(--gold);
-            margin-bottom: 25px;
-            font-size: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: var(--gold);
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 5px;
-            border: 1px solid #333;
-            background-color: #000;
-            color: #fff;
-            font-size: 1rem;
-            box-sizing: border-box;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 5px rgba(197, 160, 89, 0.5);
-        }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--gold);
-            color: #000;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background-color: #e2b86a;
-            transform: scale(1.02);
-        }
-
-        #mensagem {
-            text-align: center;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-
-        footer {
-            margin-top: auto;
-            padding: 20px;
-            font-size: 0.8rem;
-            color: #777;
-        }
+        :root { --gold: #c5a059; --dark-bg: #0f0f0f; --card-bg: #1a1a1a; --text: #ffffff; }
+        body { margin: 0; padding: 0; font-family: 'Roboto', sans-serif; background-color: var(--dark-bg); background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1000'); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        header { text-align: center; padding: 40px 20px 20px; }
+        header h1 { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: var(--gold); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        header p { font-style: italic; color: #ccc; margin-top: 5px; }
+        .container { background-color: var(--card-bg); width: 90%; max-width: 450px; padding: 30px; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); border: 1px solid rgba(197, 160, 89, 0.2); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); margin-bottom: 50px; }
+        h2 { font-family: 'Oswald', sans-serif; color: var(--gold); margin-bottom: 20px; text-align: center; font-size: 1.5rem; text-transform: uppercase; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; color: var(--gold); font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; text-transform: uppercase; }
+        input, select { width: 100%; padding: 12px; background-color: #000; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; font-family: 'Roboto', sans-serif; font-size: 1rem; }
+        input:focus, select:focus { border-color: var(--gold); outline: none; }
+        .btn-agendar { width: 100%; padding: 15px; background-color: var(--gold); color: #000; border: none; border-radius: 5px; font-weight: bold; font-size: 1.1rem; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-agendar:hover { background-color: #e2b86a; transform: scale(1.02); }
+        #mensagem { text-align: center; margin-top: 15px; font-weight: bold; display: none; padding: 10px; border-radius: 5px; }
+        .sucesso { background-color: rgba(76, 175, 80, 0.2); color: #4CAF50; border: 1px solid #4CAF50; }
+        .erro { background-color: rgba(255, 82, 82, 0.2); color: #ff5252; border: 1px solid #ff5252; }
+        footer { margin-top: auto; padding: 20px; font-size: 0.8rem; color: #777; }
     </style>
 </head>
 <body>
@@ -144,31 +34,30 @@
 
     <div class="container">
         <h2>Agende seu Horário</h2>
-        <form id="agendamento-form">
+        <form id="form-agendamento">
             <div class="form-group">
-                <label for="nome">NOME COMPLETO</label>
-                <input type="text" id="nome" placeholder="Seu nome aqui..." required>
+                <label for="nome">Nome Completo</label>
+                <input type="text" id="nome" required placeholder="Digite seu nome">
             </div>
-
+            
             <div class="form-group">
-                <label for="data">DATA E HORA</label>
+                <label for="data">Data e Hora</label>
                 <input type="datetime-local" id="data" required>
             </div>
-
+            
             <div class="form-group">
-                <label for="servico">SERVIÇO DESEJADO</label>
+                <label for="servico">Serviço Desejado</label>
                 <select id="servico" required>
-                    <option value="">Selecione um serviço...</option>
-                    <option value="Corte Simples">Corte Simples - R$ 35,00</option>
-                    <option value="Corte e Barba">Corte e Barba - R$ 60,00</option>
-                    <option value="Barba Completa">Barba Alinhada - R$ 30,00</option>
-                    <option value="Sobrancelha">Sobrancelha - R$ 15,00</option>
+                    <option value="Corte Simples - R$ 35,00">Corte Simples - R$ 35,00</option>
+                    <option value="Corte e Barba - R$ 55,00">Corte e Barba - R$ 55,00</option>
+                    <option value="Sobrancelha - R$ 15,00">Sobrancelha - R$ 15,00</option>
+                    <option value="Platinado - R$ 80,00">Platinado - R$ 80,00</option>
                 </select>
             </div>
 
-            <button type="submit">Confirmar Agendamento</button>
+            <button type="submit" class="btn-agendar">Confirmar Agendamento</button>
+            <div id="mensagem"></div>
         </form>
-        <p id="mensagem"></p>
     </div>
 
     <footer>
@@ -176,39 +65,55 @@
     </footer>
 
     <script>
-        const form = document.getElementById('agendamento-form');
-        const msg = document.getElementById('mensagem');
-
-        form.onsubmit = async (e) => {
-            e.preventDefault();
-            msg.innerText = "Enviando...";
+        document.getElementById('form-agendamento').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Impede a página de recarregar
             
-            const dados = {
-                nome: document.getElementById('nome').value,
-                data: document.getElementById('data').value,
-                servico: document.getElementById('servico').value
-            };
-
+            const nome = document.getElementById('nome').value;
+            const data = document.getElementById('data').value;
+            const servico = document.getElementById('servico').value;
+            const mensagemDiv = document.getElementById('mensagem');
+            const btnAgendar = document.querySelector('.btn-agendar');
+            
+            // Feedback visual enquanto carrega
+            mensagemDiv.style.display = 'block';
+            mensagemDiv.innerText = '⏳ Aguarde, enviando agendamento...';
+            mensagemDiv.className = '';
+            btnAgendar.disabled = true;
+            btnAgendar.style.opacity = '0.7';
+            
             try {
-                const res = await fetch('/agendamentos', {
+                // O segredo está aqui: o fetch usa apenas '/agendamentos' sem o localhost
+                const resposta = await fetch('/agendamentos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dados)
+                    body: JSON.stringify({ nome, data, servico })
                 });
-
-                if (res.ok) {
-                    msg.innerText = "✅ Sucesso! Seu horário foi reservado.";
-                    msg.style.color = "#4CAF50";
-                    form.reset();
+                
+                if (resposta.ok) {
+                    mensagemDiv.innerText = '✔️ Agendamento confirmado com sucesso!';
+                    mensagemDiv.className = 'sucesso';
+                    document.getElementById('form-agendamento').reset(); // Limpa o formulário
                 } else {
-                    msg.innerText = "❌ Erro ao agendar. Tente novamente.";
-                    msg.style.color = "#FF5252";
+                    mensagemDiv.innerText = '❌ Erro ao agendar. Tente novamente.';
+                    mensagemDiv.className = 'erro';
                 }
-            } catch (err) {
-                msg.innerText = "❌ Erro de conexão com o servidor.";
-                msg.style.color = "#FF5252";
+            } catch (erro) {
+                console.error("Erro no fetch:", erro);
+                mensagemDiv.innerText = '❌ Erro de conexão com o servidor. Verifique a internet.';
+                mensagemDiv.className = 'erro';
+            } finally {
+                // Volta o botão ao normal
+                btnAgendar.disabled = false;
+                btnAgendar.style.opacity = '1';
+                
+                // Esconde a mensagem de sucesso depois de 5 segundos
+                setTimeout(() => {
+                    if(mensagemDiv.className === 'sucesso') {
+                        mensagemDiv.style.display = 'none';
+                    }
+                }, 5000);
             }
-        };
+        });
     </script>
 </body>
 </html>

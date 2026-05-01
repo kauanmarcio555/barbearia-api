@@ -1,76 +1,69 @@
 const express = require('express');
-const sqlite3 = require('sqlite3');
-const { open } = require('sqlite');
+const sqlite3 = require('sqlite3').verbose();
+const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
 
-// Configurações iniciais
-app.use(express.json());
-// Garante que a pasta public seja encontrada em qualquer servidor
+// CONFIGURAÇÃO DA PORTA (Essencial para a Render funcionar)
+const port = process.env.PORT || 3000;
+
+// Middlewares para o servidor entender JSON e encontrar a pasta 'public'
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-let db;
-
-// Função para conectar ao Banco de Dados (usando caminho absoluto)
-async function conectarBanco() {
-    db = await open({
-        filename: path.join(__dirname, 'barbearia.db'),
-        driver: sqlite3.Database
-    });
-
-    await db.exec(`
-        CREATE TABLE IF NOT EXISTS agendamentos (
+// CONEXÃO COM O BANCO DE DADOS
+const db = new sqlite3.Database('./banco.sqlite', (err) => {
+    if (err) {
+        console.error('Erro ao conectar ao banco:', err.message);
+    } else {
+        console.log('Conectado ao banco de dados SQLite.');
+        // Cria a tabela se ela não existir
+        db.run(`CREATE TABLE IF NOT EXISTS agendamentos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            cliente TEXT,
-            servico TEXT,
+            nome TEXT,
             data TEXT,
-            hora TEXT
-        )
-    `);
-}
-
-conectarBanco();
-
-const servicos = [
-    { id: 1, nome: "Corte Simples" },
-    { id: 2, nome: "Barba Completa" },
-    { id: 3, nome: "Corte + Barba" }
-];
-
-// Rota para listar agendamentos
-app.get('/agendamentos', async (req, res) => {
-    try {
-        const lista = await db.all('SELECT * FROM agendamentos');
-        res.json(lista);
-    } catch (erro) {
-        res.status(500).json({ erro: "Erro ao buscar dados" });
+            servico TEXT
+        )`);
     }
 });
 
-// Rota para criar agendamento
-app.post('/agendamentos', async (req, res) => {
-    const { cliente, servicoId, data, hora } = req.body;
-    const servicoEscolhido = servicos.find(s => s.id === servicoId);
-
-    if (!servicoEscolhido) {
-        return res.status(400).json({ erro: "Serviço inválido" });
-    }
-
-    try {
-        await db.run(
-            'INSERT INTO agendamentos (cliente, servico, data, hora) VALUES (?, ?, ?, ?)',
-            [cliente, servicoEscolhido.nome, data, hora]
-        );
-        res.status(201).json({ mensagem: "Salvo com sucesso!" });
-    } catch (erro) {
-        res.status(500).json({ erro: "Erro ao salvar no banco" });
-    }
+// 1. ROTA PARA SALVAR (Usada pela tela do Cliente)
+app.post('/agendamentos', (req, res) => {
+    const { nome, data, servico } = req.body;
+    const query = `INSERT INTO agendamentos (nome, data, servico) VALUES (?, ?, ?)`;
+    
+    db.run(query, [nome, data, servico], function(err) {
+        if (err) {
+            console.error(err.message);
+            return res.status(500).send("Erro ao salvar no banco.");
+        }
+        res.status(200).send("Agendado com sucesso!");
+    });
 });
 
-// A mágica para o site funcionar na nuvem:
-// O servidor da Render vai dizer em qual porta rodar através de process.env.PORT
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`🚀 Sistema da Barbearia online na porta ${PORT}`);
+// 2. ROTA PARA LISTAR (Usada pela tela do Admin)
+app.get('/agendamentos', (req, res) => {
+    db.all(`SELECT * FROM agendamentos ORDER BY data ASC`, [], (err, rows) => {
+        if (err) {
+            return res.status(500).send("Erro ao buscar dados.");
+        }
+        res.json(rows);
+    });
+});
+
+// 3. ROTA PARA EXCLUIR (Usada pelo botão 'Concluir' no Admin)
+app.delete('/agendamentos/:id', (req, res) => {
+    const { id } = req.params;
+    db.run("DELETE FROM agendamentos WHERE id = ?", [id], (err) => {
+        if (err) {
+            return res.status(500).send("Erro ao excluir.");
+        }
+        res.send("Excluído com sucesso");
+    });
+});
+
+// INICIAR O SERVIDOR
+app.listen(port, () => {
+    console.log(`Servidor rodando perfeitamente na porta ${port}`);
 });

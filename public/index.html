@@ -19,7 +19,6 @@
         h1, h2, h3 { font-family: 'Oswald', sans-serif; margin: 0; text-transform: uppercase; }
         a { text-decoration: none; color: inherit; }
 
-        /* Navegação */
         nav { 
             background: rgba(5, 5, 5, 0.85); 
             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -31,7 +30,6 @@
         nav .links a { color: #fff; margin-left: 20px; font-size: 0.95rem; font-weight: bold; transition: 0.3s; text-transform: uppercase;}
         nav .links a:hover { color: var(--gold); }
 
-        /* Hero Section */
         .hero { 
             height: 100vh; 
             background-image: linear-gradient(rgba(0,0,0,0.4), rgba(5,5,5,1)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1920'); 
@@ -49,7 +47,6 @@
         }
         .btn-cta:hover { background-color: var(--gold-hover); transform: translateY(-5px); box-shadow: 0 15px 25px rgba(212, 175, 55, 0.5); }
 
-        /* Seção de Serviços */
         .servicos-section { padding: 100px 20px; text-align: center; background-color: var(--dark-bg); }
         .servicos-section h2 { color: var(--gold); font-size: 2.8rem; margin-bottom: 50px; letter-spacing: 2px; }
         
@@ -69,7 +66,6 @@
         .card-info p { color: #888; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5; }
         .preco { display: inline-block; padding: 8px 15px; background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold); color: var(--gold); font-weight: bold; font-size: 1.1rem; border-radius: 4px; }
 
-        /* Agendamento */
         .agendamento-section { 
             padding: 100px 20px; display: flex; flex-direction: column; align-items: center; 
             background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=1920');
@@ -170,6 +166,11 @@
                     <label for="nome">Nome Completo</label>
                     <input type="text" id="nome" required placeholder="Ex: João da Silva">
                 </div>
+
+                <div class="form-group">
+                    <label for="telefone">Seu WhatsApp</label>
+                    <input type="tel" id="telefone" required placeholder="(83) 9 9999-9999">
+                </div>
                 
                 <div class="form-group">
                     <label for="data">Data e Hora</label>
@@ -204,6 +205,7 @@
             event.preventDefault(); 
             
             const nome = document.getElementById('nome').value;
+            const telefone = document.getElementById('telefone').value;
             const data = document.getElementById('data').value;
             const servico = document.getElementById('servico').value;
             const mensagemDiv = document.getElementById('mensagem');
@@ -216,10 +218,11 @@
             btnAgendar.style.opacity = '0.7';
             
             try {
+                // Envia os dados para o servidor (incluindo o novo campo telefone)
                 const resposta = await fetch('/agendamentos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nome, data, servico })
+                    body: JSON.stringify({ nome, telefone, data, servico })
                 });
                 
                 if (resposta.ok) {
@@ -228,12 +231,12 @@
                     
                     const seuTelefone = "5583991397274"; 
                     const dataFormatada = data.replace('T', ' às ');
-                    const textoZap = `Fala Kauan! Acabei de agendar um horário pelo site VIP.%0A%0A*Nome:* ${nome}%0A*Serviço:* ${servico}%0A*Data/Hora:* ${dataFormatada}`;
+                    const textoZap = encodeURIComponent(`Fala Kauan! Acabei de agendar um horário pelo site VIP.\n\n*Nome:* ${nome}\n*Telefone:* ${telefone}\n*Serviço:* ${servico}\n*Data/Hora:* ${dataFormatada}`);
                     
                     setTimeout(() => {
-                        window.open(`https://wa.me/${seuTelefone}?text=${textoZap}`, '_blank');
-                        document.getElementById('form-agendamento').reset(); 
-                    }, 2000);
+                        // Redirecionamento forçado para funcionar 100% no celular
+                        window.location.href = `https://wa.me/${seuTelefone}?text=${textoZap}`;
+                    }, 1500);
 
                 } else {
                     const erroTexto = await resposta.text();
@@ -247,7 +250,6 @@
             } finally {
                 btnAgendar.disabled = false;
                 btnAgendar.style.opacity = '1';
-                setTimeout(() => { if(mensagemDiv.className === 'sucesso') mensagemDiv.style.display = 'none'; }, 5000);
             }
         });
     </script>

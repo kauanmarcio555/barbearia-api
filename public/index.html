@@ -3,59 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barbearia do Kauan | Agendamento VIP</title>
+    <title>Barbearia do Kauan | Agendamento Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #c5a059; --dark-bg: #0f0f0f; --card-bg: #1a1a1a; --text: #ffffff; }
+        :root { 
+            --gold: #d4af37; 
+            --gold-hover: #f3e5ab;
+            --dark-bg: #050505; 
+            --card-bg: #121212; 
+            --text: #ffffff; 
+        }
         
-        /* Reset e Configurações Gerais */
         html { scroll-behavior: smooth; }
         body { margin: 0; padding: 0; font-family: 'Roboto', sans-serif; background-color: var(--dark-bg); color: var(--text); }
         h1, h2, h3 { font-family: 'Oswald', sans-serif; margin: 0; text-transform: uppercase; }
         a { text-decoration: none; color: inherit; }
 
-        /* Barra de Navegação no Topo */
-        nav { background-color: rgba(0, 0, 0, 0.9); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: fixed; width: 100%; top: 0; z-index: 1000; box-sizing: border-box; border-bottom: 1px solid var(--gold); }
-        nav .logo { color: var(--gold); font-size: 1.5rem; font-weight: bold; font-family: 'Oswald', sans-serif; letter-spacing: 1px; }
-        nav .links a { color: #fff; margin-left: 15px; font-size: 0.9rem; transition: 0.3s; }
+        nav { 
+            background: rgba(5, 5, 5, 0.85); 
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; 
+            position: fixed; width: 100%; top: 0; z-index: 1000; box-sizing: border-box; 
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2); 
+        }
+        nav .logo { color: var(--gold); font-size: 1.8rem; font-weight: bold; font-family: 'Oswald', sans-serif; letter-spacing: 2px; }
+        nav .links a { color: #fff; margin-left: 20px; font-size: 0.95rem; font-weight: bold; transition: 0.3s; text-transform: uppercase;}
         nav .links a:hover { color: var(--gold); }
 
-        /* Seção Herói (Capa) */
-        .hero { height: 100vh; background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1920'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
-        .hero h1 { font-size: 3.5rem; color: var(--gold); letter-spacing: 3px; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); margin-bottom: 10px; }
-        .hero p { font-size: 1.2rem; color: #ccc; margin-bottom: 30px; font-style: italic; max-width: 600px; }
-        .btn-cta { padding: 15px 40px; background-color: var(--gold); color: #000; font-family: 'Oswald', sans-serif; font-size: 1.2rem; border-radius: 5px; font-weight: bold; transition: 0.3s; box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4); }
-        .btn-cta:hover { background-color: #e2b86a; transform: translateY(-3px); }
+        .hero { 
+            height: 100vh; 
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(5,5,5,1)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1920'); 
+            background-size: cover; background-position: center; background-attachment: fixed;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; 
+        }
+        .hero h1 { font-size: 4.5rem; color: var(--text); letter-spacing: 3px; text-shadow: 2px 2px 15px rgba(0,0,0,0.8); margin-bottom: 10px; }
+        .hero h1 span { color: var(--gold); }
+        .hero p { font-size: 1.3rem; color: #ccc; margin-bottom: 40px; font-weight: 300; max-width: 600px; }
+        
+        .btn-cta { 
+            padding: 18px 45px; background-color: var(--gold); color: #000; font-family: 'Oswald', sans-serif; 
+            font-size: 1.2rem; border-radius: 3px; font-weight: bold; transition: 0.4s; 
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn-cta:hover { background-color: var(--gold-hover); transform: translateY(-5px); box-shadow: 0 15px 25px rgba(212, 175, 55, 0.5); }
 
-        /* Seção de Serviços / Vitrine */
-        .servicos-section { padding: 80px 20px; text-align: center; background-color: #111; }
-        .servicos-section h2 { color: var(--gold); font-size: 2.5rem; margin-bottom: 40px; }
-        .cards-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; }
-        .card { background-color: var(--card-bg); width: 280px; border-radius: 10px; overflow: hidden; border: 1px solid #333; transition: 0.3s; }
-        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
-        .card img { width: 100%; height: 200px; object-fit: cover; }
-        .card-info { padding: 20px; }
-        .card-info h3 { color: var(--gold); margin-bottom: 10px; font-size: 1.3rem; }
-        .card-info p { color: #aaa; font-size: 0.9rem; margin-bottom: 15px; }
-        .preco { font-weight: bold; font-size: 1.2rem; color: #fff; }
+        .servicos-section { padding: 100px 20px; text-align: center; background-color: var(--dark-bg); }
+        .servicos-section h2 { color: var(--gold); font-size: 2.8rem; margin-bottom: 50px; letter-spacing: 2px; }
+        
+        .cards-container { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 30px; max-width: 1200px; margin: 0 auto; 
+        }
+        .card { 
+            background-color: var(--card-bg); border-radius: 8px; overflow: hidden; 
+            border: 1px solid #222; transition: 0.4s; position: relative;
+        }
+        .card:hover { border-color: var(--gold); transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.8); }
+        .card img { width: 100%; height: 220px; object-fit: cover; transition: 0.4s; }
+        .card:hover img { opacity: 0.8; }
+        .card-info { padding: 25px 20px; }
+        .card-info h3 { color: #fff; margin-bottom: 10px; font-size: 1.4rem; }
+        .card-info p { color: #888; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5; }
+        .preco { display: inline-block; padding: 8px 15px; background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold); color: var(--gold); font-weight: bold; font-size: 1.1rem; border-radius: 4px; }
 
-        /* Seção de Agendamento (Onde fica o formulário) */
-        .agendamento-section { padding: 80px 20px; display: flex; flex-direction: column; align-items: center; background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); }
-        .container { background-color: var(--card-bg); width: 100%; max-width: 450px; padding: 30px; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid rgba(197, 160, 89, 0.2); box-sizing: border-box; }
-        .container h2 { color: var(--gold); margin-bottom: 20px; text-align: center; font-size: 1.8rem; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; color: var(--gold); font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; text-transform: uppercase; }
-        input, select { width: 100%; padding: 12px; background-color: #000; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; font-family: 'Roboto', sans-serif; font-size: 1rem; }
-        input:focus, select:focus { border-color: var(--gold); outline: none; }
-        .btn-agendar { width: 100%; padding: 15px; background-color: var(--gold); color: #000; border: none; border-radius: 5px; font-weight: bold; font-size: 1.1rem; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn-agendar:hover { background-color: #e2b86a; transform: scale(1.02); }
-        #mensagem { text-align: center; margin-top: 15px; font-weight: bold; display: none; padding: 10px; border-radius: 5px; }
-        .sucesso { background-color: rgba(76, 175, 80, 0.2); color: #4CAF50; border: 1px solid #4CAF50; }
-        .erro { background-color: rgba(255, 82, 82, 0.2); color: #ff5252; border: 1px solid #ff5252; }
+        .agendamento-section { 
+            padding: 100px 20px; display: flex; flex-direction: column; align-items: center; 
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover; background-attachment: fixed;
+        }
+        .container { 
+            background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            width: 100%; max-width: 500px; padding: 40px; border-radius: 12px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9); border: 1px solid rgba(212, 175, 55, 0.3); box-sizing: border-box; 
+        }
+        .container h2 { color: var(--text); margin-bottom: 30px; text-align: center; font-size: 2rem; letter-spacing: 1px;}
+        .container h2 span { color: var(--gold); }
+        
+        .form-group { margin-bottom: 25px; text-align: left; }
+        label { display: block; color: #ccc; font-weight: bold; margin-bottom: 8px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        input, select { 
+            width: 100%; padding: 15px; background-color: rgba(0,0,0,0.6); border: 1px solid #444; 
+            color: white; border-radius: 4px; box-sizing: border-box; font-family: 'Roboto', sans-serif; font-size: 1rem; transition: 0.3s;
+        }
+        input:focus, select:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); background-color: rgba(0,0,0,0.8);}
+        
+        .btn-agendar { 
+            width: 100%; padding: 18px; background-color: var(--gold); color: #000; border: none; 
+            border-radius: 4px; font-weight: bold; font-size: 1.2rem; text-transform: uppercase; 
+            cursor: pointer; transition: 0.3s; margin-top: 10px; font-family: 'Oswald', sans-serif; letter-spacing: 1px;
+        }
+        .btn-agendar:hover { background-color: var(--gold-hover); transform: scale(1.02); }
+        
+        #mensagem { text-align: center; margin-top: 20px; font-weight: bold; display: none; padding: 15px; border-radius: 4px; }
+        .sucesso { background-color: rgba(76, 175, 80, 0.1); color: #4CAF50; border: 1px solid #4CAF50; }
+        .erro { background-color: rgba(255, 82, 82, 0.1); color: #ff5252; border: 1px solid #ff5252; }
 
-        /* Rodapé */
-        footer { background-color: #000; padding: 30px 20px; text-align: center; color: #777; font-size: 0.9rem; border-top: 1px solid #333; }
-        footer p { margin: 5px 0; }
+        footer { background-color: #000; padding: 40px 20px; text-align: center; color: #666; font-size: 0.9rem; border-top: 1px solid #222; }
+        footer p { margin: 8px 0; }
         footer strong { color: var(--gold); }
     </style>
 </head>
@@ -71,9 +115,9 @@
     </nav>
 
     <section id="inicio" class="hero">
-        <h1>Barbearia do Kauan</h1>
-        <p>Mais do que um corte, uma experiência. O melhor estilo para o homem moderno.</p>
-        <a href="#agendamento" class="btn-cta">✂️ Marcar Meu Horário</a>
+        <h1>Barbearia do <span>Kauan</span></h1>
+        <p>A excelência que o seu estilo exige. Do clássico ao platinado, nós somos especialistas na sua melhor versão.</p>
+        <a href="#agendamento" class="btn-cta">Agendar Agora</a>
     </section>
 
     <section id="servicos" class="servicos-section">
@@ -82,25 +126,33 @@
             <div class="card">
                 <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&q=80&w=500" alt="Corte Degradê">
                 <div class="card-info">
-                    <h3>Corte Simples / Degradê</h3>
-                    <p>Corte na tesoura ou máquina com acabamento impecável.</p>
+                    <h3>Corte Clássico / Degradê</h3>
+                    <p>Corte na tesoura ou máquina com acabamento impecável e perfilhamento.</p>
                     <div class="preco">R$ 35,00</div>
                 </div>
             </div>
             <div class="card">
                 <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=500" alt="Barba Terapia">
                 <div class="card-info">
-                    <h3>Barba Terapia</h3>
-                    <p>Alinhamento de barba com toalha quente e massagem facial.</p>
+                    <h3>Barboterapia VIP</h3>
+                    <p>Alinhamento de barba, toalha quente, ozônio e massagem relaxante.</p>
                     <div class="preco">R$ 20,00</div>
                 </div>
             </div>
             <div class="card">
-                <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=500" alt="Combo Completo">
+                <img src="https://images.unsplash.com/photo-1587515516766-9e19d7b43343?auto=format&fit=crop&q=80&w=500" alt="Combo Completo">
                 <div class="card-info">
-                    <h3>Corte + Barba VIP</h3>
-                    <p>O pacote completo para sair da barbearia renovado.</p>
+                    <h3>Corte + Barba</h3>
+                    <p>O combo de respeito. Saia da cadeira totalmente renovado e com estilo.</p>
                     <div class="preco">R$ 55,00</div>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&q=80&w=500" alt="Cabelo Platinado">
+                <div class="card-info">
+                    <h3>Nevou / Platinado</h3>
+                    <p>Descoloração profissional com proteção para os fios. O famoso "Nevou" com qualidade.</p>
+                    <div class="preco">R$ 80,00</div>
                 </div>
             </div>
         </div>
@@ -108,11 +160,11 @@
 
     <section id="agendamento" class="agendamento-section">
         <div class="container">
-            <h2>Reserve seu Horário</h2>
+            <h2>Reserve seu <span>Horário</span></h2>
             <form id="form-agendamento">
                 <div class="form-group">
                     <label for="nome">Nome Completo</label>
-                    <input type="text" id="nome" required placeholder="Digite seu nome">
+                    <input type="text" id="nome" required placeholder="Ex: João da Silva">
                 </div>
                 
                 <div class="form-group">
@@ -123,24 +175,24 @@
                 <div class="form-group">
                     <label for="servico">Serviço Desejado</label>
                     <select id="servico" required>
-                        <option value="Corte Simples - R$ 35,00">Corte Simples - R$ 35,00</option>
+                        <option value="Corte Simples - R$ 35,00">Corte Clássico / Degradê - R$ 35,00</option>
                         <option value="Corte e Barba - R$ 55,00">Corte e Barba - R$ 55,00</option>
                         <option value="Barba - R$ 20,00">Somente Barba - R$ 20,00</option>
                         <option value="Sobrancelha - R$ 15,00">Sobrancelha - R$ 15,00</option>
-                        <option value="Platinado - R$ 80,00">Platinado - R$ 80,00</option>
+                        <option value="Platinado - R$ 80,00">Nevou / Platinado - R$ 80,00</option>
                     </select>
                 </div>
 
-                <button type="submit" class="btn-agendar">Confirmar Agendamento</button>
+                <button type="submit" class="btn-agendar">Confirmar Reserva</button>
                 <div id="mensagem"></div>
             </form>
         </div>
     </section>
 
     <footer>
-        <p><strong>📍 Endereço:</strong> Rua Principal, 123 - Centro</p>
+        <p><strong>📍 Endereço:</strong> Rua Dionísio Rodrigues da Costa, 1067 - Solânea, PB</p>
         <p><strong>⏰ Funcionamento:</strong> Seg a Sáb - 09:00 às 19:00</p>
-        <p style="margin-top: 15px; font-size: 0.8rem;">&copy; 2026 Barbearia do Kauan. Todos os direitos reservados.</p>
+        <p style="margin-top: 20px; font-size: 0.8rem;">&copy; 2026 Barbearia do Kauan. Desenvolvido com excelência.</p>
     </footer>
 
     <script>
@@ -167,12 +219,12 @@
                 });
                 
                 if (resposta.ok) {
-                    mensagemDiv.innerText = '✔️ Sucesso! Redirecionando para o WhatsApp...';
+                    mensagemDiv.innerText = '✔️ Agendado! Redirecionando para o seu WhatsApp...';
                     mensagemDiv.className = 'sucesso';
                     
                     const seuTelefone = "5583991397274"; 
                     const dataFormatada = data.replace('T', ' às ');
-                    const textoZap = `Fala Kauan! Acabei de agendar um horário pelo site.%0A%0A*Nome:* ${nome}%0A*Serviço:* ${servico}%0A*Data/Hora:* ${dataFormatada}`;
+                    const textoZap = `Fala Kauan! Acabei de agendar um horário pelo site VIP.%0A%0A*Nome:* ${nome}%0A*Serviço:* ${servico}%0A*Data/Hora:* ${dataFormatada}`;
                     
                     setTimeout(() => {
                         window.open(`https://wa.me/${seuTelefone}?text=${textoZap}`, '_blank');

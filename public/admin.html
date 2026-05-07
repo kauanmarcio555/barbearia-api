@@ -38,9 +38,9 @@
         }
         .btn-sair:hover { background-color: #ff5252; color: #fff; }
 
-        .container { width: 95%; max-width: 1000px; margin-top: 30px; }
+        .container { width: 95%; max-width: 1000px; margin-top: 30px; margin-bottom: 50px; }
         
-        /* Cards de Estatísticas (O Dashboard!) */
+        /* Cards de Estatísticas */
         .dashboard-stats {
             display: flex; gap: 20px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap;
         }
@@ -52,7 +52,6 @@
         .stat-card .numero { font-size: 2.5rem; font-weight: bold; color: #fff; margin: 0; }
         .stat-card .numero span { color: var(--gold); font-size: 1.5rem; }
 
-        /* Lista de Agendamentos em Grade */
         .topo-lista { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;}
         .topo-lista h2 { font-family: 'Oswald', sans-serif; color: var(--gold); font-size: 1.8rem; margin: 0; }
         
@@ -62,6 +61,7 @@
         }
         .btn-gold:hover { background-color: #e2b86a; transform: scale(1.05); }
 
+        /* Lista de Agendamentos */
         #lista-agendamentos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         
         .cliente-card {
@@ -73,6 +73,8 @@
         .cliente-card h3 { margin: 0 0 15px 0; color: var(--gold); font-family: 'Oswald', sans-serif; font-size: 1.4rem; }
         .cliente-card p { margin: 8px 0; font-size: 0.95rem; color: #ccc; }
         .cliente-card strong { color: #fff; }
+        .cliente-card a { color: #4CAF50; text-decoration: none; font-weight: bold; }
+        .cliente-card a:hover { text-decoration: underline; }
         
         .btn-excluir {
             width: 100%; padding: 12px; background-color: #1a1a1a; color: #4CAF50;
@@ -81,6 +83,27 @@
         }
         .btn-excluir:hover { background-color: #4CAF50; color: #000; }
         
+        /* Sessão de Caixa (Novidade!) */
+        .caixa-section {
+            background-color: var(--card-bg); padding: 25px; border-radius: 10px; border: 1px solid #333;
+            margin-top: 50px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between;
+        }
+        .caixa-inputs { display: flex; gap: 15px; flex-wrap: wrap; flex: 1; }
+        .caixa-inputs div { display: flex; flex-direction: column; width: 100%; max-width: 200px; }
+        .caixa-inputs label { font-size: 0.85rem; color: #aaa; margin-bottom: 5px; font-weight: bold; text-transform: uppercase; }
+        .caixa-inputs input { 
+            padding: 10px; border-radius: 5px; border: 1px solid #444; background: #000; color: #fff; font-size: 1.1rem;
+        }
+        .caixa-inputs input:focus { outline: none; border-color: var(--gold); }
+        
+        #lista-historico { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        .historico-item { 
+            display: flex; justify-content: space-between; padding: 15px; 
+            border-bottom: 1px solid #333; background: #111; border-radius: 5px; margin-bottom: 10px;
+        }
+        .historico-item span { font-weight: bold; font-size: 1.1rem; }
+        .historico-item .valor-verde { color: #4CAF50; }
+
         #mensagem { text-align: center; color: #888; font-style: italic; width: 100%; grid-column: 1 / -1; }
         footer { margin-top: auto; padding: 20px; font-size: 0.8rem; color: #555; text-align: center; width: 100%; }
     </style>
@@ -95,11 +118,11 @@
     <div class="container">
         <div class="dashboard-stats">
             <div class="stat-card">
-                <h3>Total de Agendamentos</h3>
+                <h3>Agendamentos Pendentes</h3>
                 <p class="numero" id="total-clientes">0</p>
             </div>
             <div class="stat-card">
-                <h3>Previsão de Faturamento</h3>
+                <h3>Previsão de Faturamento (Pendentes)</h3>
                 <p class="numero"><span>R$</span> <span id="total-faturamento">0,00</span></p>
             </div>
         </div>
@@ -112,6 +135,34 @@
         <div id="lista-agendamentos">
             <p id="mensagem">Carregando dados do servidor...</p>
         </div>
+
+        <div class="topo-lista" style="margin-top: 60px;">
+            <h2>💰 Fechamento de Caixa</h2>
+        </div>
+        
+        <div class="caixa-section">
+            <div class="caixa-inputs">
+                <div>
+                    <label>Data:</label>
+                    <input type="date" id="caixa-data" required>
+                </div>
+                <div>
+                    <label>Valor Total do Dia (R$):</label>
+                    <input type="number" id="caixa-valor" step="0.01" placeholder="Ex: 250.50" required>
+                </div>
+            </div>
+            <button class="btn-gold" style="padding: 15px 30px; font-size: 1.1rem;" onclick="salvarCaixa()">Salvar no Sistema</button>
+        </div>
+
+        <div class="topo-lista" style="margin-top: 40px;">
+            <h2>📋 Histórico dos Últimos Dias</h2>
+            <button class="btn-gold" style="padding: 5px 15px; font-size: 0.9rem;" onclick="carregarHistorico()">🔄 Recarregar Histórico</button>
+        </div>
+        
+        <div id="lista-historico">
+            <p style="color: #888; font-style: italic;">Carregando histórico...</p>
+        </div>
+
     </div>
 
     <footer>
@@ -119,6 +170,9 @@
     </footer>
 
     <script>
+        // Seta a data de hoje automaticamente no input de caixa
+        document.getElementById('caixa-data').value = new Date().toISOString().split('T')[0];
+
         function sair() {
             localStorage.removeItem('adminLogado');
             window.location.href = 'login.html';
@@ -136,8 +190,6 @@
                 const agendamentos = await resposta.json();
 
                 divLista.innerHTML = ''; 
-                
-                // Atualiza o total de clientes
                 numClientes.innerText = agendamentos.length;
 
                 if (agendamentos.length === 0) {
@@ -149,10 +201,7 @@
                 let faturamentoCalculado = 0;
 
                 agendamentos.forEach(a => {
-                    // Formata a data e hora
                     let dataF = a.data.replace('T', ' às ');
-                    
-                    // Lógica para extrair o preço do serviço e somar
                     let valor = 0;
                     if(a.servico.includes("35,00")) valor = 35;
                     if(a.servico.includes("55,00")) valor = 55;
@@ -162,11 +211,15 @@
                     
                     faturamentoCalculado += valor;
                     
-                    // Cria o cartão do cliente
+                    // Número do WhatsApp formatado para link (se não tiver salva como Sem número)
+                    let telefoneExibicao = a.telefone || "Sem número";
+                    let linkZap = a.telefone ? `<a href="https://wa.me/55${a.telefone.replace(/\D/g, '')}" target="_blank">${a.telefone}</a>` : "Sem número";
+
                     const divCard = document.createElement('div');
                     divCard.className = 'cliente-card';
                     divCard.innerHTML = `
                         <h3>${a.nome}</h3>
+                        <p><strong>📱 WhatsApp:</strong> ${linkZap}</p>
                         <p><strong>📅 Data:</strong> ${dataF}</p>
                         <p><strong>✂️ Serviço:</strong> ${a.servico}</p>
                         <button class="btn-excluir" onclick="excluir(${a.id})">✔ Concluir Atendimento</button>
@@ -174,7 +227,6 @@
                     divLista.appendChild(divCard);
                 });
 
-                // Atualiza o painel de faturamento
                 numFaturamento.innerText = faturamentoCalculado.toFixed(2).replace('.', ',');
 
             } catch (erro) {
@@ -183,11 +235,11 @@
         }
 
         async function excluir(id) {
-            if (!confirm("O cliente já foi atendido? Isso removerá o agendamento da lista.")) return;
+            if (!confirm("O cliente já foi atendido? O agendamento sairá da lista para você poder fechar o caixa.")) return;
             try {
                 const res = await fetch(`/agendamentos/${id}`, { method: 'DELETE' });
                 if (res.ok) {
-                    carregarAgendamentos(); // Recarrega a lista e atualiza os números!
+                    carregarAgendamentos(); 
                 } else {
                     alert("Erro ao concluir.");
                 }
@@ -196,8 +248,73 @@
             }
         }
 
-        // Inicia carregando os dados
+        // --- FUNÇÕES DO NOVO SISTEMA DE CAIXA ---
+
+        async function salvarCaixa() {
+            const dataInput = document.getElementById('caixa-data').value;
+            const valorInput = document.getElementById('caixa-valor').value;
+
+            if(!dataInput || !valorInput) {
+                alert("Por favor, preencha a data e o valor do faturamento!");
+                return;
+            }
+
+            try {
+                const res = await fetch('/faturamentos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ data: dataInput, valor: parseFloat(valorInput) })
+                });
+
+                if(res.ok) {
+                    alert("✅ Faturamento salvo com sucesso!");
+                    document.getElementById('caixa-valor').value = ''; // Limpa o campo
+                    carregarHistorico(); // Atualiza a lista embaixo
+                } else {
+                    alert("❌ Erro ao salvar faturamento.");
+                }
+            } catch(e) {
+                alert("Erro de conexão ao salvar caixa.");
+            }
+        }
+
+        async function carregarHistorico() {
+            const divHistorico = document.getElementById('lista-historico');
+            divHistorico.innerHTML = '<p style="color: #888; font-style: italic;">Atualizando histórico...</p>';
+
+            try {
+                const resposta = await fetch('/faturamentos');
+                const historico = await resposta.json();
+
+                divHistorico.innerHTML = '';
+
+                if(historico.length === 0) {
+                    divHistorico.innerHTML = '<p style="color: #888; font-style: italic;">Nenhum faturamento salvo ainda.</p>';
+                    return;
+                }
+
+                historico.forEach(item => {
+                    // Formata a data (de YYYY-MM-DD para DD/MM/YYYY)
+                    let partesData = item.data.split('-');
+                    let dataFormatada = partesData.length === 3 ? `${partesData[2]}/${partesData[1]}/${partesData[0]}` : item.data;
+                    
+                    const divItem = document.createElement('div');
+                    divItem.className = 'historico-item';
+                    divItem.innerHTML = `
+                        <span>📅 ${dataFormatada}</span>
+                        <span class="valor-verde">R$ ${parseFloat(item.valor).toFixed(2).replace('.', ',')}</span>
+                    `;
+                    divHistorico.appendChild(divItem);
+                });
+
+            } catch (erro) {
+                divHistorico.innerHTML = '<p style="color: #FF5252;">Erro ao carregar histórico.</p>';
+            }
+        }
+
+        // Inicia carregando tudo ao abrir o painel
         carregarAgendamentos();
+        carregarHistorico();
     </script>
 </body>
 </html>

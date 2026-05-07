@@ -7,11 +7,11 @@
     
     <script>
         if (localStorage.getItem('adminLogado') !== 'sim') {
-            window.location.href = 'login.html'; // Chuta a pessoa pro login
+            window.location.href = 'login.html';
         }
     </script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold: #c5a059;
@@ -20,137 +20,174 @@
             --text: #ffffff;
         }
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--dark-bg);
-            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1000');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: var(--text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            margin: 0; padding: 0; font-family: 'Roboto', sans-serif;
+            background-color: var(--dark-bg); color: var(--text);
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
-        header { text-align: center; padding: 40px 20px; }
-        header h1 {
-            font-family: 'Oswald', sans-serif; font-size: 3rem; color: var(--gold);
-            margin: 0; text-transform: uppercase; letter-spacing: 4px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        header p { font-style: italic; color: #ccc; margin-top: 5px; }
         
-        .container {
-            background-color: var(--card-bg); width: 90%; max-width: 450px;
-            padding: 30px; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-            border: 1px solid rgba(197, 160, 89, 0.2);
-            -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px);
-            margin-bottom: 50px;
+        /* Cabeçalho */
+        header { 
+            width: 100%; background-color: #000; padding: 20px 0; text-align: center; 
+            border-bottom: 2px solid var(--gold); box-shadow: 0 4px 15px rgba(0,0,0,0.8);
         }
-        h2 { text-align: center; font-family: 'Oswald', sans-serif; color: var(--gold); margin-bottom: 25px; font-size: 1.5rem; }
+        header h1 { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: var(--gold); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .btn-sair {
+            background-color: transparent; border: 1px solid #ff5252; color: #ff5252; 
+            padding: 8px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold; transition: 0.3s;
+        }
+        .btn-sair:hover { background-color: #ff5252; color: #fff; }
+
+        .container { width: 95%; max-width: 1000px; margin-top: 30px; }
+        
+        /* Cards de Estatísticas (O Dashboard!) */
+        .dashboard-stats {
+            display: flex; gap: 20px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap;
+        }
+        .stat-card {
+            background-color: var(--card-bg); padding: 20px; border-radius: 10px; flex: 1; min-width: 200px;
+            text-align: center; border: 1px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.5); border-left: 5px solid var(--gold);
+        }
+        .stat-card h3 { color: #aaa; font-size: 1rem; margin: 0 0 10px 0; text-transform: uppercase; font-family: 'Oswald', sans-serif;}
+        .stat-card .numero { font-size: 2.5rem; font-weight: bold; color: #fff; margin: 0; }
+        .stat-card .numero span { color: var(--gold); font-size: 1.5rem; }
+
+        /* Lista de Agendamentos em Grade */
+        .topo-lista { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;}
+        .topo-lista h2 { font-family: 'Oswald', sans-serif; color: var(--gold); font-size: 1.8rem; margin: 0; }
         
         .btn-gold {
-            width: 100%; padding: 15px; background-color: var(--gold); color: #000;
-            border: none; border-radius: 5px; font-weight: bold; font-size: 1.1rem;
-            text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-bottom: 20px;
+            padding: 10px 20px; background-color: var(--gold); color: #000;
+            border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s;
         }
-        .btn-gold:hover { background-color: #e2b86a; transform: scale(1.02); }
+        .btn-gold:hover { background-color: #e2b86a; transform: scale(1.05); }
 
+        #lista-agendamentos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        
         .cliente-card {
-            background-color: #000;
-            border: 1px solid #333;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 15px;
-            transition: 0.3s;
+            background-color: #111; border: 1px solid #333; border-radius: 8px; padding: 20px;
+            transition: 0.3s; position: relative; overflow: hidden;
         }
-        .cliente-card:hover { border-color: var(--gold); }
-        .cliente-card h3 { margin: 0 0 10px 0; color: var(--gold); font-family: 'Oswald', sans-serif; }
-        .cliente-card p { margin: 5px 0; font-size: 0.95rem; color: #ccc; }
+        .cliente-card:hover { border-color: var(--gold); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.6); }
+        .cliente-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background-color: var(--gold); }
+        .cliente-card h3 { margin: 0 0 15px 0; color: var(--gold); font-family: 'Oswald', sans-serif; font-size: 1.4rem; }
+        .cliente-card p { margin: 8px 0; font-size: 0.95rem; color: #ccc; }
+        .cliente-card strong { color: #fff; }
         
         .btn-excluir {
-            width: 100%; padding: 10px; background-color: transparent; color: #ff5252;
-            border: 1px solid #ff5252; border-radius: 5px; font-weight: bold;
-            cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase;
+            width: 100%; padding: 12px; background-color: #1a1a1a; color: #4CAF50;
+            border: 1px solid #4CAF50; border-radius: 5px; font-weight: bold;
+            cursor: pointer; transition: 0.3s; margin-top: 15px; text-transform: uppercase;
         }
-        .btn-excluir:hover { background-color: #ff5252; color: #000; }
+        .btn-excluir:hover { background-color: #4CAF50; color: #000; }
         
-        #mensagem { text-align: center; color: #888; font-style: italic; }
-        footer { margin-top: auto; padding: 20px; font-size: 0.8rem; color: #777; }
+        #mensagem { text-align: center; color: #888; font-style: italic; width: 100%; grid-column: 1 / -1; }
+        footer { margin-top: auto; padding: 20px; font-size: 0.8rem; color: #555; text-align: center; width: 100%; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Painel VIP</h1>
-        <p>Gerenciamento de Clientes</p>
-        <button onclick="sair()" style="background-color: transparent; border: 1px solid #c5a059; color: #c5a059; padding: 5px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold;">Sair / Logout</button>
+        <h1>Painel de Controle</h1>
+        <button class="btn-sair" onclick="sair()">Desconectar</button>
     </header>
 
     <div class="container">
-        <h2>Próximos Agendamentos</h2>
-        <button class="btn-gold" onclick="carregarAgendamentos()">🔄 Atualizar Lista</button>
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <h3>Total de Agendamentos</h3>
+                <p class="numero" id="total-clientes">0</p>
+            </div>
+            <div class="stat-card">
+                <h3>Previsão de Faturamento</h3>
+                <p class="numero"><span>R$</span> <span id="total-faturamento">0,00</span></p>
+            </div>
+        </div>
+
+        <div class="topo-lista">
+            <h2>Próximos Clientes</h2>
+            <button class="btn-gold" onclick="carregarAgendamentos()">🔄 Atualizar</button>
+        </div>
         
         <div id="lista-agendamentos">
-            <p id="mensagem">Carregando...</p>
+            <p id="mensagem">Carregando dados do servidor...</p>
         </div>
     </div>
 
     <footer>
-        &copy; 2026 Barbearia do Kauan - Acesso Restrito
+        &copy; 2026 Barbearia do Kauan - Sistema de Gestão Interno
     </footer>
 
     <script>
-        // Função do Botão Sair
         function sair() {
-            localStorage.removeItem('adminLogado'); // Tira a chave de acesso
-            window.location.href = 'login.html'; // Volta pra tela de login
+            localStorage.removeItem('adminLogado');
+            window.location.href = 'login.html';
         }
 
-        // Função de Carregar os Agendamentos do Banco
         async function carregarAgendamentos() {
             const divLista = document.getElementById('lista-agendamentos');
-            divLista.innerHTML = '<p id="mensagem">Atualizando...</p>';
+            const numClientes = document.getElementById('total-clientes');
+            const numFaturamento = document.getElementById('total-faturamento');
+            
+            divLista.innerHTML = '<p id="mensagem">Atualizando banco de dados...</p>';
 
             try {
                 const resposta = await fetch('/agendamentos');
                 const agendamentos = await resposta.json();
 
                 divLista.innerHTML = ''; 
+                
+                // Atualiza o total de clientes
+                numClientes.innerText = agendamentos.length;
 
                 if (agendamentos.length === 0) {
-                    divLista.innerHTML = '<p id="mensagem">Nenhum cliente agendado.</p>';
+                    divLista.innerHTML = '<p id="mensagem">Sua agenda está livre no momento.</p>';
+                    numFaturamento.innerText = "0,00";
                     return;
                 }
 
+                let faturamentoCalculado = 0;
+
                 agendamentos.forEach(a => {
+                    // Formata a data e hora
                     let dataF = a.data.replace('T', ' às ');
                     
+                    // Lógica para extrair o preço do serviço e somar
+                    let valor = 0;
+                    if(a.servico.includes("35,00")) valor = 35;
+                    if(a.servico.includes("55,00")) valor = 55;
+                    if(a.servico.includes("20,00")) valor = 20;
+                    if(a.servico.includes("15,00")) valor = 15;
+                    if(a.servico.includes("80,00")) valor = 80;
+                    
+                    faturamentoCalculado += valor;
+                    
+                    // Cria o cartão do cliente
                     const divCard = document.createElement('div');
                     divCard.className = 'cliente-card';
                     divCard.innerHTML = `
                         <h3>${a.nome}</h3>
-                        <p><strong>📅 Data/Hora:</strong> ${dataF}</p>
+                        <p><strong>📅 Data:</strong> ${dataF}</p>
                         <p><strong>✂️ Serviço:</strong> ${a.servico}</p>
-                        <button class="btn-excluir" onclick="excluir(${a.id})">✔ Marcar como Concluído</button>
+                        <button class="btn-excluir" onclick="excluir(${a.id})">✔ Concluir Atendimento</button>
                     `;
                     divLista.appendChild(divCard);
                 });
 
+                // Atualiza o painel de faturamento
+                numFaturamento.innerText = faturamentoCalculado.toFixed(2).replace('.', ',');
+
             } catch (erro) {
-                divLista.innerHTML = '<p id="mensagem" style="color: #FF5252;">Erro ao carregar os dados.</p>';
+                divLista.innerHTML = '<p id="mensagem" style="color: #FF5252;">Erro de comunicação com o servidor.</p>';
             }
         }
 
-        // Função de Concluir Atendimento
         async function excluir(id) {
-            if (!confirm("Finalizar este agendamento?")) return;
+            if (!confirm("O cliente já foi atendido? Isso removerá o agendamento da lista.")) return;
             try {
                 const res = await fetch(`/agendamentos/${id}`, { method: 'DELETE' });
                 if (res.ok) {
-                    carregarAgendamentos();
+                    carregarAgendamentos(); // Recarrega a lista e atualiza os números!
                 } else {
                     alert("Erro ao concluir.");
                 }
@@ -159,7 +196,7 @@
             }
         }
 
-        // Carrega automaticamente ao abrir a página
+        // Inicia carregando os dados
         carregarAgendamentos();
     </script>
 </body>

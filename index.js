@@ -1,12 +1,11 @@
 const express = require('express');
-const { Pool } = require('pg'); // Nova biblioteca do banco PostgreSQL
+const { Pool } = require('pg');
 const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Conexão com o seu banco de dados na nuvem da Render
 const pool = new Pool({
     connectionString: "postgresql://banco_barbearia_hh8r_user:LQwwXdzUmLhkARvBbFPYQVYmPCfm7ler@dpg-d7ttbkdckfvc73ecut60-a/banco_barbearia_hh8r",
     ssl: { rejectUnauthorized: false }
@@ -15,10 +14,9 @@ const pool = new Pool({
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 1. CRIAÇÃO DAS TABELAS
+// 1. CRIAÇÃO E ATUALIZAÇÃO DAS TABELAS
 const criarTabelas = async () => {
     try {
-        // Tabela de Agendamentos (AGORA COM TELEFONE)
         await pool.query(`
             CREATE TABLE IF NOT EXISTS agendamentos (
                 id SERIAL PRIMARY KEY,
@@ -29,7 +27,9 @@ const criarTabelas = async () => {
             )
         `);
 
-        // Tabela de Faturamentos Diários (NOVIDADE)
+        // 👇 ESTA É A LINHA MÁGICA QUE CORRIGE O ERRO DA SUA FOTO 👇
+        await pool.query(`ALTER TABLE agendamentos ADD COLUMN IF NOT EXISTS telefone TEXT;`);
+
         await pool.query(`
             CREATE TABLE IF NOT EXISTS faturamentos (
                 id SERIAL PRIMARY KEY,
@@ -37,9 +37,9 @@ const criarTabelas = async () => {
                 valor DECIMAL(10, 2) DEFAULT 0.00
             )
         `);
-        console.log("Tabelas do banco de dados prontas!");
+        console.log("Tabelas do banco de dados prontas e atualizadas!");
     } catch (err) {
-        console.error("Erro ao criar tabelas:", err);
+        console.error("Erro ao criar/atualizar tabelas:", err);
     }
 };
 
@@ -47,20 +47,16 @@ criarTabelas();
 
 // --- ROTAS DE AGENDAMENTO ---
 
-// SALVAR NOVO AGENDAMENTO
 app.post('/agendamentos', async (req, res) => {
-    // Agora recebe o telefone também
     const { nome, telefone, data, servico } = req.body;
 
     try {
-        // Verifica se o horário já está ocupado
         const check = await pool.query("SELECT * FROM agendamentos WHERE data = $1", [data]);
         
         if (check.rows.length > 0) {
             return res.status(400).send("Ops! Este horário já está reservado. Escolha outro.");
         }
 
-        // Salva no banco com o telefone
         await pool.query(
             "INSERT INTO agendamentos (nome, telefone, data, servico) VALUES ($1, $2, $3, $4)", 
             [nome, telefone, data, servico]
@@ -73,7 +69,6 @@ app.post('/agendamentos', async (req, res) => {
     }
 });
 
-// LER AGENDAMENTOS (Painel do Admin)
 app.get('/agendamentos', async (req, res) => {
     try {
         const result = await pool.query("SELECT * FROM agendamentos ORDER BY data ASC");
@@ -84,7 +79,6 @@ app.get('/agendamentos', async (req, res) => {
     }
 });
 
-// EXCLUIR AGENDAMENTO (Quando conclui ou cancela)
 app.delete('/agendamentos/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -99,12 +93,10 @@ app.delete('/agendamentos/:id', async (req, res) => {
 
 // --- ROTAS DE FATURAMENTO ---
 
-// SALVAR OU ATUALIZAR FATURAMENTO DO DIA
 app.post('/faturamentos', async (req, res) => {
     const { data, valor } = req.body;
     
     try {
-        // Tenta inserir. Se a data já existir (ON CONFLICT), ele soma o valor novo ao valor existente.
         await pool.query(`
             INSERT INTO faturamentos (data, valor) 
             VALUES ($1, $2)
@@ -119,10 +111,8 @@ app.post('/faturamentos', async (req, res) => {
     }
 });
 
-// LER HISTÓRICO DE FATURAMENTOS
 app.get('/faturamentos', async (req, res) => {
     try {
-        // Busca os faturamentos ordenados pela data mais recente
         const result = await pool.query("SELECT * FROM faturamentos ORDER BY data DESC LIMIT 30");
         res.json(result.rows);
     } catch (err) {
@@ -130,7 +120,6 @@ app.get('/faturamentos', async (req, res) => {
         res.status(500).send("Erro ao buscar faturamentos.");
     }
 });
-
 
 app.listen(port, () => {
     console.log(`Servidor profissional rodando na porta ${port}`);

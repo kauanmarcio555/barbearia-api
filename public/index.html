@@ -3,16 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barbearia do Kauan | Agendamento</title>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <title>Barbearia do Kauan | Agendamento VIP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #c5a059; --dark-bg: #0f0f0f; --card-bg: #1a1a1a; --text: #ffffff; }
-        body { margin: 0; padding: 0; font-family: 'Roboto', sans-serif; background-color: var(--dark-bg); background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1000'); background-size: cover; background-position: center; background-attachment: fixed; color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        header { text-align: center; padding: 40px 20px 20px; }
-        header h1 { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: var(--gold); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
-        header p { font-style: italic; color: #ccc; margin-top: 5px; }
-        .container { background-color: var(--card-bg); width: 90%; max-width: 450px; padding: 30px; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); border: 1px solid rgba(197, 160, 89, 0.2); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); margin-bottom: 50px; }
-        h2 { font-family: 'Oswald', sans-serif; color: var(--gold); margin-bottom: 20px; text-align: center; font-size: 1.5rem; text-transform: uppercase; }
+        
+        /* Reset e Configurações Gerais */
+        html { scroll-behavior: smooth; }
+        body { margin: 0; padding: 0; font-family: 'Roboto', sans-serif; background-color: var(--dark-bg); color: var(--text); }
+        h1, h2, h3 { font-family: 'Oswald', sans-serif; margin: 0; text-transform: uppercase; }
+        a { text-decoration: none; color: inherit; }
+
+        /* Barra de Navegação no Topo */
+        nav { background-color: rgba(0, 0, 0, 0.9); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: fixed; width: 100%; top: 0; z-index: 1000; box-sizing: border-box; border-bottom: 1px solid var(--gold); }
+        nav .logo { color: var(--gold); font-size: 1.5rem; font-weight: bold; font-family: 'Oswald', sans-serif; letter-spacing: 1px; }
+        nav .links a { color: #fff; margin-left: 15px; font-size: 0.9rem; transition: 0.3s; }
+        nav .links a:hover { color: var(--gold); }
+
+        /* Seção Herói (Capa) */
+        .hero { height: 100vh; background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1920'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        .hero h1 { font-size: 3.5rem; color: var(--gold); letter-spacing: 3px; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); margin-bottom: 10px; }
+        .hero p { font-size: 1.2rem; color: #ccc; margin-bottom: 30px; font-style: italic; max-width: 600px; }
+        .btn-cta { padding: 15px 40px; background-color: var(--gold); color: #000; font-family: 'Oswald', sans-serif; font-size: 1.2rem; border-radius: 5px; font-weight: bold; transition: 0.3s; box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4); }
+        .btn-cta:hover { background-color: #e2b86a; transform: translateY(-3px); }
+
+        /* Seção de Serviços / Vitrine */
+        .servicos-section { padding: 80px 20px; text-align: center; background-color: #111; }
+        .servicos-section h2 { color: var(--gold); font-size: 2.5rem; margin-bottom: 40px; }
+        .cards-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; }
+        .card { background-color: var(--card-bg); width: 280px; border-radius: 10px; overflow: hidden; border: 1px solid #333; transition: 0.3s; }
+        .card:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-info { padding: 20px; }
+        .card-info h3 { color: var(--gold); margin-bottom: 10px; font-size: 1.3rem; }
+        .card-info p { color: #aaa; font-size: 0.9rem; margin-bottom: 15px; }
+        .preco { font-weight: bold; font-size: 1.2rem; color: #fff; }
+
+        /* Seção de Agendamento (Onde fica o formulário) */
+        .agendamento-section { padding: 80px 20px; display: flex; flex-direction: column; align-items: center; background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); }
+        .container { background-color: var(--card-bg); width: 100%; max-width: 450px; padding: 30px; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid rgba(197, 160, 89, 0.2); box-sizing: border-box; }
+        .container h2 { color: var(--gold); margin-bottom: 20px; text-align: center; font-size: 1.8rem; }
         .form-group { margin-bottom: 20px; }
         label { display: block; color: var(--gold); font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; text-transform: uppercase; }
         input, select { width: 100%; padding: 12px; background-color: #000; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; font-family: 'Roboto', sans-serif; font-size: 1rem; }
@@ -22,46 +52,95 @@
         #mensagem { text-align: center; margin-top: 15px; font-weight: bold; display: none; padding: 10px; border-radius: 5px; }
         .sucesso { background-color: rgba(76, 175, 80, 0.2); color: #4CAF50; border: 1px solid #4CAF50; }
         .erro { background-color: rgba(255, 82, 82, 0.2); color: #ff5252; border: 1px solid #ff5252; }
-        footer { margin-top: auto; padding: 20px; font-size: 0.8rem; color: #777; }
+
+        /* Rodapé */
+        footer { background-color: #000; padding: 30px 20px; text-align: center; color: #777; font-size: 0.9rem; border-top: 1px solid #333; }
+        footer p { margin: 5px 0; }
+        footer strong { color: var(--gold); }
     </style>
 </head>
 <body>
 
-    <header>
+    <nav>
+        <div class="logo">KAUAN BARBER</div>
+        <div class="links">
+            <a href="#inicio">Início</a>
+            <a href="#servicos">Serviços</a>
+            <a href="#agendamento">Agendar</a>
+        </div>
+    </nav>
+
+    <section id="inicio" class="hero">
         <h1>Barbearia do Kauan</h1>
-        <p>Estilo, Tradição e Excelência</p>
-    </header>
+        <p>Mais do que um corte, uma experiência. O melhor estilo para o homem moderno.</p>
+        <a href="#agendamento" class="btn-cta">✂️ Marcar Meu Horário</a>
+    </section>
 
-    <div class="container">
-        <h2>Agende seu Horário</h2>
-        <form id="form-agendamento">
-            <div class="form-group">
-                <label for="nome">Nome Completo</label>
-                <input type="text" id="nome" required placeholder="Digite seu nome">
+    <section id="servicos" class="servicos-section">
+        <h2>Nossos Serviços</h2>
+        <div class="cards-container">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&q=80&w=500" alt="Corte Degradê">
+                <div class="card-info">
+                    <h3>Corte Simples / Degradê</h3>
+                    <p>Corte na tesoura ou máquina com acabamento impecável.</p>
+                    <div class="preco">R$ 35,00</div>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="data">Data e Hora</label>
-                <input type="datetime-local" id="data" required>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&q=80&w=500" alt="Barba Terapia">
+                <div class="card-info">
+                    <h3>Barba Terapia</h3>
+                    <p>Alinhamento de barba com toalha quente e massagem facial.</p>
+                    <div class="preco">R$ 20,00</div>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <label for="servico">Serviço Desejado</label>
-                <select id="servico" required>
-                    <option value="Corte Simples - R$ 35,00">Corte Simples - R$ 35,00</option>
-                    <option value="Corte e Barba - R$ 55,00">Corte e Barba - R$ 55,00</option>
-                    <option value="Sobrancelha - R$ 15,00">Sobrancelha - R$ 15,00</option>
-                    <option value="Platinado - R$ 80,00">Platinado - R$ 80,00</option>
-                </select>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=500" alt="Combo Completo">
+                <div class="card-info">
+                    <h3>Corte + Barba VIP</h3>
+                    <p>O pacote completo para sair da barbearia renovado.</p>
+                    <div class="preco">R$ 55,00</div>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <button type="submit" class="btn-agendar">Confirmar Agendamento</button>
-            <div id="mensagem"></div>
-        </form>
-    </div>
+    <section id="agendamento" class="agendamento-section">
+        <div class="container">
+            <h2>Reserve seu Horário</h2>
+            <form id="form-agendamento">
+                <div class="form-group">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" required placeholder="Digite seu nome">
+                </div>
+                
+                <div class="form-group">
+                    <label for="data">Data e Hora</label>
+                    <input type="datetime-local" id="data" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="servico">Serviço Desejado</label>
+                    <select id="servico" required>
+                        <option value="Corte Simples - R$ 35,00">Corte Simples - R$ 35,00</option>
+                        <option value="Corte e Barba - R$ 55,00">Corte e Barba - R$ 55,00</option>
+                        <option value="Barba - R$ 20,00">Somente Barba - R$ 20,00</option>
+                        <option value="Sobrancelha - R$ 15,00">Sobrancelha - R$ 15,00</option>
+                        <option value="Platinado - R$ 80,00">Platinado - R$ 80,00</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-agendar">Confirmar Agendamento</button>
+                <div id="mensagem"></div>
+            </form>
+        </div>
+    </section>
 
     <footer>
-        &copy; 2026 Barbearia do Kauan - Todos os direitos reservados.
+        <p><strong>📍 Endereço:</strong> Rua Principal, 123 - Centro</p>
+        <p><strong>⏰ Funcionamento:</strong> Seg a Sáb - 09:00 às 19:00</p>
+        <p style="margin-top: 15px; font-size: 0.8rem;">&copy; 2026 Barbearia do Kauan. Todos os direitos reservados.</p>
     </footer>
 
     <script>
@@ -91,26 +170,23 @@
                     mensagemDiv.innerText = '✔️ Sucesso! Redirecionando para o WhatsApp...';
                     mensagemDiv.className = 'sucesso';
                     
-                    // --- SEU WHATSAPP CONFIGURADO AQUI ---
                     const seuTelefone = "5583991397274"; 
                     const dataFormatada = data.replace('T', ' às ');
                     const textoZap = `Fala Kauan! Acabei de agendar um horário pelo site.%0A%0A*Nome:* ${nome}%0A*Serviço:* ${servico}%0A*Data/Hora:* ${dataFormatada}`;
                     
-                    // Aguarda 2 segundos e abre o WhatsApp do cliente
                     setTimeout(() => {
                         window.open(`https://wa.me/${seuTelefone}?text=${textoZap}`, '_blank');
-                        document.getElementById('form-agendamento').reset(); // Limpa o formulário
+                        document.getElementById('form-agendamento').reset(); 
                     }, 2000);
 
                 } else {
-                    // Mensagem caso o horário já esteja ocupado
                     const erroTexto = await resposta.text();
                     mensagemDiv.innerText = '❌ ' + erroTexto;
                     mensagemDiv.className = 'erro';
                 }
             } catch (erro) {
                 console.error("Erro no fetch:", erro);
-                mensagemDiv.innerText = '❌ Erro de conexão com o servidor. Verifique a internet.';
+                mensagemDiv.innerText = '❌ Erro de conexão com o servidor.';
                 mensagemDiv.className = 'erro';
             } finally {
                 btnAgendar.disabled = false;

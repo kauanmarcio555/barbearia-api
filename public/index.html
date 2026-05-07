@@ -66,7 +66,7 @@
 
     <script>
         document.getElementById('form-agendamento').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Impede a página de recarregar
+            event.preventDefault(); 
             
             const nome = document.getElementById('nome').value;
             const data = document.getElementById('data').value;
@@ -74,15 +74,13 @@
             const mensagemDiv = document.getElementById('mensagem');
             const btnAgendar = document.querySelector('.btn-agendar');
             
-            // Feedback visual enquanto carrega
             mensagemDiv.style.display = 'block';
-            mensagemDiv.innerText = '⏳ Aguarde, enviando agendamento...';
+            mensagemDiv.innerText = '⏳ Verificando horário no sistema...';
             mensagemDiv.className = '';
             btnAgendar.disabled = true;
             btnAgendar.style.opacity = '0.7';
             
             try {
-                // O segredo está aqui: o fetch usa apenas '/agendamentos' sem o localhost
                 const resposta = await fetch('/agendamentos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -90,11 +88,24 @@
                 });
                 
                 if (resposta.ok) {
-                    mensagemDiv.innerText = '✔️ Agendamento confirmado com sucesso!';
+                    mensagemDiv.innerText = '✔️ Sucesso! Redirecionando para o WhatsApp...';
                     mensagemDiv.className = 'sucesso';
-                    document.getElementById('form-agendamento').reset(); // Limpa o formulário
+                    
+                    // --- SEU WHATSAPP CONFIGURADO AQUI ---
+                    const seuTelefone = "5583991397274"; 
+                    const dataFormatada = data.replace('T', ' às ');
+                    const textoZap = `Fala Kauan! Acabei de agendar um horário pelo site.%0A%0A*Nome:* ${nome}%0A*Serviço:* ${servico}%0A*Data/Hora:* ${dataFormatada}`;
+                    
+                    // Aguarda 2 segundos e abre o WhatsApp do cliente
+                    setTimeout(() => {
+                        window.open(`https://wa.me/${seuTelefone}?text=${textoZap}`, '_blank');
+                        document.getElementById('form-agendamento').reset(); // Limpa o formulário
+                    }, 2000);
+
                 } else {
-                    mensagemDiv.innerText = '❌ Erro ao agendar. Tente novamente.';
+                    // Mensagem caso o horário já esteja ocupado
+                    const erroTexto = await resposta.text();
+                    mensagemDiv.innerText = '❌ ' + erroTexto;
                     mensagemDiv.className = 'erro';
                 }
             } catch (erro) {
@@ -102,16 +113,9 @@
                 mensagemDiv.innerText = '❌ Erro de conexão com o servidor. Verifique a internet.';
                 mensagemDiv.className = 'erro';
             } finally {
-                // Volta o botão ao normal
                 btnAgendar.disabled = false;
                 btnAgendar.style.opacity = '1';
-                
-                // Esconde a mensagem de sucesso depois de 5 segundos
-                setTimeout(() => {
-                    if(mensagemDiv.className === 'sucesso') {
-                        mensagemDiv.style.display = 'none';
-                    }
-                }, 5000);
+                setTimeout(() => { if(mensagemDiv.className === 'sucesso') mensagemDiv.style.display = 'none'; }, 5000);
             }
         });
     </script>

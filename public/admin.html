@@ -25,7 +25,6 @@
             display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
         
-        /* Cabeçalho */
         header { 
             width: 100%; background-color: #000; padding: 20px 0; text-align: center; 
             border-bottom: 2px solid var(--gold); box-shadow: 0 4px 15px rgba(0,0,0,0.8);
@@ -40,7 +39,6 @@
 
         .container { width: 95%; max-width: 1000px; margin-top: 30px; margin-bottom: 50px; }
         
-        /* Cards de Estatísticas */
         .dashboard-stats {
             display: flex; gap: 20px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap;
         }
@@ -61,7 +59,6 @@
         }
         .btn-gold:hover { background-color: #e2b86a; transform: scale(1.05); }
 
-        /* Lista de Agendamentos */
         #lista-agendamentos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         
         .cliente-card {
@@ -83,7 +80,6 @@
         }
         .btn-excluir:hover { background-color: #4CAF50; color: #000; }
         
-        /* Sessão de Caixa (Novidade!) */
         .caixa-section {
             background-color: var(--card-bg); padding: 25px; border-radius: 10px; border: 1px solid #333;
             margin-top: 50px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: space-between;
@@ -122,7 +118,7 @@
                 <p class="numero" id="total-clientes">0</p>
             </div>
             <div class="stat-card">
-                <h3>Previsão de Faturamento (Pendentes)</h3>
+                <h3>Previsão de Faturamento</h3>
                 <p class="numero"><span>R$</span> <span id="total-faturamento">0,00</span></p>
             </div>
         </div>
@@ -137,7 +133,7 @@
         </div>
 
         <div class="topo-lista" style="margin-top: 60px;">
-            <h2>💰 Fechamento de Caixa</h2>
+            <h2>💰 Lançar Valor Extra</h2>
         </div>
         
         <div class="caixa-section">
@@ -147,15 +143,15 @@
                     <input type="date" id="caixa-data" required>
                 </div>
                 <div>
-                    <label>Valor Total do Dia (R$):</label>
-                    <input type="number" id="caixa-valor" step="0.01" placeholder="Ex: 250.50" required>
+                    <label>Valor Extra (R$):</label>
+                    <input type="number" id="caixa-valor" step="0.01" placeholder="Ex: Produto, gorjeta..." required>
                 </div>
             </div>
-            <button class="btn-gold" style="padding: 15px 30px; font-size: 1.1rem;" onclick="salvarCaixa()">Salvar no Sistema</button>
+            <button class="btn-gold" style="padding: 15px 30px; font-size: 1.1rem;" onclick="salvarCaixa()">Somar ao Caixa</button>
         </div>
 
         <div class="topo-lista" style="margin-top: 40px;">
-            <h2>📋 Histórico dos Últimos Dias</h2>
+            <h2>📋 Histórico de Faturamento (Automático)</h2>
             <button class="btn-gold" style="padding: 5px 15px; font-size: 0.9rem;" onclick="carregarHistorico()">🔄 Recarregar Histórico</button>
         </div>
         
@@ -170,7 +166,6 @@
     </footer>
 
     <script>
-        // Seta a data de hoje automaticamente no input de caixa
         document.getElementById('caixa-data').value = new Date().toISOString().split('T')[0];
 
         function sair() {
@@ -211,8 +206,6 @@
                     
                     faturamentoCalculado += valor;
                     
-                    // Número do WhatsApp formatado para link (se não tiver salva como Sem número)
-                    let telefoneExibicao = a.telefone || "Sem número";
                     let linkZap = a.telefone ? `<a href="https://wa.me/55${a.telefone.replace(/\D/g, '')}" target="_blank">${a.telefone}</a>` : "Sem número";
 
                     const divCard = document.createElement('div');
@@ -222,7 +215,7 @@
                         <p><strong>📱 WhatsApp:</strong> ${linkZap}</p>
                         <p><strong>📅 Data:</strong> ${dataF}</p>
                         <p><strong>✂️ Serviço:</strong> ${a.servico}</p>
-                        <button class="btn-excluir" onclick="excluir(${a.id})">✔ Concluir Atendimento</button>
+                        <button class="btn-excluir" onclick="excluir(${a.id}, ${valor})">✔ Concluir Atendimento</button>
                     `;
                     divLista.appendChild(divCard);
                 });
@@ -234,12 +227,26 @@
             }
         }
 
-        async function excluir(id) {
-            if (!confirm("O cliente já foi atendido? O agendamento sairá da lista para você poder fechar o caixa.")) return;
+        // AGORA A FUNÇÃO RECEBE O VALOR TAMBÉM
+        async function excluir(id, valorServico) {
+            if (!confirm("Confirmar atendimento? O valor do serviço será somado no caixa de hoje automaticamente.")) return;
             try {
+                // 1. Remove da agenda
                 const res = await fetch(`/agendamentos/${id}`, { method: 'DELETE' });
+                
                 if (res.ok) {
-                    carregarAgendamentos(); 
+                    // 2. Se deu certo, soma o valor no faturamento do dia automaticamente!
+                    if(valorServico > 0) {
+                        const dataHoje = new Date().toISOString().split('T')[0];
+                        await fetch('/faturamentos', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ data: dataHoje, valor: parseFloat(valorServico) })
+                        });
+                    }
+                    
+                    carregarAgendamentos(); // Atualiza os cartões
+                    setTimeout(carregarHistorico, 500); // Dá um tempinho e atualiza o histórico ali embaixo
                 } else {
                     alert("Erro ao concluir.");
                 }
@@ -248,14 +255,13 @@
             }
         }
 
-        // --- FUNÇÕES DO NOVO SISTEMA DE CAIXA ---
-
+        // Para lançamentos manuais (ex: vendeu uma pomada)
         async function salvarCaixa() {
             const dataInput = document.getElementById('caixa-data').value;
             const valorInput = document.getElementById('caixa-valor').value;
 
             if(!dataInput || !valorInput) {
-                alert("Por favor, preencha a data e o valor do faturamento!");
+                alert("Por favor, preencha o valor!");
                 return;
             }
 
@@ -267,9 +273,9 @@
                 });
 
                 if(res.ok) {
-                    alert("✅ Faturamento salvo com sucesso!");
-                    document.getElementById('caixa-valor').value = ''; // Limpa o campo
-                    carregarHistorico(); // Atualiza a lista embaixo
+                    alert("✅ Valor adicionado ao caixa do dia!");
+                    document.getElementById('caixa-valor').value = ''; 
+                    carregarHistorico(); 
                 } else {
                     alert("❌ Erro ao salvar faturamento.");
                 }
@@ -294,7 +300,6 @@
                 }
 
                 historico.forEach(item => {
-                    // Formata a data (de YYYY-MM-DD para DD/MM/YYYY)
                     let partesData = item.data.split('-');
                     let dataFormatada = partesData.length === 3 ? `${partesData[2]}/${partesData[1]}/${partesData[0]}` : item.data;
                     
@@ -312,7 +317,6 @@
             }
         }
 
-        // Inicia carregando tudo ao abrir o painel
         carregarAgendamentos();
         carregarHistorico();
     </script>

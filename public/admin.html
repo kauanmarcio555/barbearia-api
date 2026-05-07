@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Barbeiro | Barbearia do Kauan</title>
+    
+    <script>
+        if (localStorage.getItem('adminLogado') !== 'sim') {
+            window.location.href = 'login.html'; // Chuta a pessoa pro login
+        }
+    </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -35,7 +42,6 @@
         }
         header p { font-style: italic; color: #ccc; margin-top: 5px; }
         
-        /* O mesmo container do agendamento */
         .container {
             background-color: var(--card-bg); width: 90%; max-width: 450px;
             padding: 30px; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.8);
@@ -52,7 +58,6 @@
         }
         .btn-gold:hover { background-color: #e2b86a; transform: scale(1.02); }
 
-        /* Estilo dos mini-cartões de cada cliente */
         .cliente-card {
             background-color: #000;
             border: 1px solid #333;
@@ -81,6 +86,7 @@
     <header>
         <h1>Painel VIP</h1>
         <p>Gerenciamento de Clientes</p>
+        <button onclick="sair()" style="background-color: transparent; border: 1px solid #c5a059; color: #c5a059; padding: 5px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; font-weight: bold;">Sair / Logout</button>
     </header>
 
     <div class="container">
@@ -97,6 +103,13 @@
     </footer>
 
     <script>
+        // Função do Botão Sair
+        function sair() {
+            localStorage.removeItem('adminLogado'); // Tira a chave de acesso
+            window.location.href = 'login.html'; // Volta pra tela de login
+        }
+
+        // Função de Carregar os Agendamentos do Banco
         async function carregarAgendamentos() {
             const divLista = document.getElementById('lista-agendamentos');
             divLista.innerHTML = '<p id="mensagem">Atualizando...</p>';
@@ -131,6 +144,7 @@
             }
         }
 
+        // Função de Concluir Atendimento
         async function excluir(id) {
             if (!confirm("Finalizar este agendamento?")) return;
             try {
@@ -145,7 +159,7 @@
             }
         }
 
-        // Carrega automaticamente
+        // Carrega automaticamente ao abrir a página
         carregarAgendamentos();
     </script>
 </body>

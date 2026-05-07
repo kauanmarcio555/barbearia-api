@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Painel Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #c5a059; --dark-bg: #0f0f0f; --card-bg: #1a1a1a; --text: #ffffff; }
+        body { margin: 0; padding: 0; font-family: 'Roboto', sans-serif; background-color: var(--dark-bg); color: var(--text); display: flex; justify-content: center; align-items: center; height: 100vh; background-image: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1000'); background-size: cover; }
+        .login-box { background-color: var(--card-bg); padding: 40px; border-radius: 10px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); border: 1px solid rgba(197, 160, 89, 0.3); width: 100%; max-width: 350px; text-align: center; }
+        h1 { font-family: 'Oswald', sans-serif; color: var(--gold); margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+        input { width: 100%; padding: 15px; margin-bottom: 20px; background-color: #000; border: 1px solid #333; color: white; border-radius: 5px; box-sizing: border-box; font-size: 1rem; text-align: center; }
+        input:focus { border-color: var(--gold); outline: none; }
+        button { width: 100%; padding: 15px; background-color: var(--gold); color: #000; border: none; border-radius: 5px; font-weight: bold; font-size: 1.1rem; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+        button:hover { background-color: #e2b86a; transform: scale(1.02); }
+        #erro { color: #ff5252; margin-top: 15px; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h1>Acesso Restrito</h1>
+        <input type="password" id="senha" placeholder="Digite a senha de administrador" onkeypress="verificarEnter(event)">
+        <button onclick="fazerLogin()">Entrar</button>
+        <div id="erro">Senha incorreta!</div>
+    </div>
+
+    <script>
+        // Função para logar clicando no botão
+        function fazerLogin() {
+            const senhaDigitada = document.getElementById('senha').value;
+            const mensagemErro = document.getElementById('erro');
+
+            // A SUA SENHA FICA AQUI 👇
+            if (senhaDigitada === 'kauan123') {
+                // Salva uma "chave" no navegador confirmando que você é o dono
+                localStorage.setItem('adminLogado', 'sim');
+                window.location.href = 'admin.html'; // Manda para o painel
+            } else {
+                mensagemErro.style.display = 'block';
+            }
+        }
+
+        // Função para logar apertando o Enter do teclado
+        function verificarEnter(event) {
+            if (event.key === 'Enter') {
+                fazerLogin();
+            }
+        }
+    </script>
+</body>
+</html>

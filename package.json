@@ -15,5 +15,13 @@
     "pg": "^8.20.0",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kauanmarcio555/barbearia-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kauanmarcio555/barbearia-api/issues"
+  },
+  "homepage": "https://github.com/kauanmarcio555/barbearia-api#readme"
 }
